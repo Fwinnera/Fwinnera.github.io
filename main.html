@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esme's Compliment Corner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            overflow: hidden;
+            background: linear-gradient(to bottom, #fce7f3, #f9d1e0);
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .compliment-box {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+        }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+        }
+        #compliment {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+        }
+        button {
+            background: linear-gradient(to right, #f9a8d4, #ec4899);
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #ec4899, #db2777);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-gray-800">
+    <canvas id="bgCanvas"></canvas>
+    <div class="compliment-box">
+        <h1 class="text-4xl font-bold text-pink-600 mb-4">Esme's Compliment Corner</h1>
+        <p id="compliment" class="text-lg mb-6 italic text-pink-700">Click the button for a special compliment, just for you!</p>
+        <button onclick="generateCompliment()" class="px-6 py-3 rounded-full text-white font-semibold text-lg">Get a Compliment!</button>
+    </div>
+
+    <script>
+        const compliments = [
+            "Esme, your kindness lights up every room you walk into!",
+            "Your smile is like a warm hug on a chilly day, Esme.",
+            "The way you make everyone feel so loved is truly magical, Esme.",
+            "Esme, your creativity sparkles brighter than a starry night!",
+            "Your heart is a treasure chest of warmth and compassion, Esme.",
+            "Esme, your laughter is the sweetest melody in the world.",
+            "You have a way of making even the ordinary feel extraordinary, Esme!",
+            "Esme, your strength and grace inspire everyone around you.",
+            "Your quirky charm is like a delightful surprise every day, Esme!",
+            "Esme, you’re a walking ray of sunshine, even on cloudy days.",
+            "The world is a better place because of your gentle spirit, Esme.",
+            "Esme, your thoughtfulness makes everyone feel so seen and valued.",
+            "Your adventurous spirit is absolutely contagious, Esme!",
+            "Esme, you have a heart so big it could hold the whole universe.",
+            "Your playful energy is like a burst of confetti, Esme!",
+            "Esme, your determination is a beacon of inspiration for us all.",
+            "Your gentle touch turns every moment into something special, Esme.",
+            "Esme, your wisdom shines through in every word you share.",
+            "You make the world more beautiful just by being you, Esme.",
+            "Esme, your enthusiasm for life is like a warm summer breeze.",
+            "Your courage to be yourself is truly admirable, Esme.",
+            "Esme, your presence feels like a cozy blanket on a rainy day.",
+            "Your ability to listen makes everyone feel so understood, Esme.",
+            "Esme, your spark of joy could light up the darkest nights.",
+            "You have a gift for making every moment unforgettable, Esme.",
+            "Esme, your warmth is like a campfire that draws everyone near.",
+            "Your unique perspective makes the world so much brighter, Esme.",
+            "Esme, your kindness is a ripple that spreads love everywhere.",
+            "Your laughter is like a melody that lingers in the heart, Esme.",
+            "Esme, you make every day feel like a special occasion.",
+            "Your creativity turns dreams into reality, Esme.",
+            "Esme, your gentle spirit is a gift to everyone around you.",
+            "You have a way of making everyone feel at home, Esme.",
+            "Esme, your smile is a sunrise that brightens the whole day.",
+            "Your passion for life is absolutely infectious, Esme!",
+            "Esme, your heart is a garden where kindness blooms endlessly.",
+            "You bring a touch of magic to everything you do, Esme.",
+            "Esme, your strength is like an oak tree, steady and strong.",
+            "Your playful spirit makes every moment a little more fun, Esme.",
+            "Esme, your empathy makes the world a softer, kinder place.",
+            "Your curiosity about the world is truly inspiring, Esme.",
+            "Esme, you have a glow that makes everyone feel warm inside.",
+            "Your ability to find beauty in the small things is a gift, Esme.",
+            "Esme, your voice is a soothing balm for any weary soul.",
+            "You make every conversation feel like a warm embrace, Esme.",
+            "Esme, your determination is a lighthouse guiding others forward.",
+            "Your sense of humor is like a spark that lights up the room, Esme.",
+            "Esme, your grace makes every step you take look effortless.",
+            "You have a heart that’s as boundless as the sky, Esme.",
+            "Esme, your optimism is a sunrise that chases away the shadows.",
+            "Your creativity is like a canvas painted with endless possibilities, Esme.",
+            "Esme, your kindness is a melody that everyone loves to hear.",
+            "You make the world feel like a cozier place, Esme.",
+            "Esme, your smile is a treasure that brightens any moment.",
+            "Your adventurous heart makes every journey unforgettable, Esme.",
+            "Esme, your compassion is a warm light in a cold world.",
+            "You have a way of making everyone feel like they belong, Esme.",
+            "Esme, your energy is like a burst of starlight in the night sky.",
+            "Your thoughtfulness is a gift that keeps on giving, Esme.",
+            "Esme, your laughter is like bubbles floating on a sunny day.",
+            "You make every moment sparkle with your unique charm, Esme.",
+            "Esme, your strength is a quiet force that moves mountains.",
+            "Your playful quirks are what make you so wonderfully you, Esme.",
+            "Esme, your heart is a haven for anyone who needs comfort.",
+            "You bring joy to the world in ways you can’t even imagine, Esme.",
+            "Esme, your creativity is a fountain of endless inspiration.",
+            "Your kindness is like a soft breeze that soothes the soul, Esme.",
+            "Esme, your presence is a gift that makes every day brighter.",
+            "You have a way of turning challenges into opportunities, Esme.",
+            "Esme, your smile is a spark that ignites joy in others.",
+            "Your courage to chase your dreams is truly inspiring, Esme.",
+            "Esme, your warmth is like a cozy fire on a winter’s night.",
+            "You make every moment feel like a page from a fairy tale, Esme.",
+            "Esme, your empathy is a bridge that connects hearts together.",
+            "Your enthusiasm is like a burst of color in a gray world, Esme.",
+            "Esme, your heart is a masterpiece painted with love and care.",
+            "You have a gift for making everyone feel valued, Esme.",
+            "Esme, your laughter is like a song that lifts every spirit.",
+            "Your creativity flows like a river of endless ideas, Esme.",
+            "Esme, your kindness is a light that never fades.",
+            "You make the world a more beautiful place just by existing, Esme.",
+            "Esme, your strength is a quiet power that inspires us all.",
+            "Your playful spirit is like a dance that everyone wants to join, Esme.",
+            "Esme, your compassion makes every heart feel at home.",
+            "You have a way of making every day feel like a celebration, Esme.",
+            "Esme, your smile is a beacon of hope in any storm.",
+            "Your curiosity is a spark that lights up new paths, Esme.",
+            "Esme, your warmth is like a sunrise that warms the heart.",
+            "You make every moment feel like a gift, Esme.",
+            "Esme, your creativity is a spark that ignites wonder in others.",
+            "Your kindness is a melody that soothes every soul, Esme.",
+            "Esme, your presence is like a soft glow in a dark world.",
+            "You have a heart that radiates love in every direction, Esme.",
+            "Esme, your laughter is a symphony of joy and delight.",
+            "Your strength is like a river that carves its own path, Esme.",
+            "Esme, your playful charm is a treasure that never grows old.",
+            "You make every day feel like a warm embrace, Esme.",
+            "Esme, your compassion is a lighthouse for those who are lost.",
+            "Your creativity is like a garden blooming with new ideas, Esme.",
+            "Esme, your kindness is a star that guides us all.",
+            "You have a way of making everyone feel like they’re enough, Esme.",
+            "Esme, your smile is a burst of light that brightens any day.",
+            "Your adventurous spirit is like a wind that carries us forward, Esme.",
+            "Esme, your heart is a sanctuary of love and warmth.",
+            "You make the world feel softer and kinder, Esme.",
+            "Esme, your laughter is like a ripple of joy across a lake.",
+            "Your creativity is a spark that lights up the world, Esme.",
+            "Esme, your strength is a quiet force that moves hearts.",
+            "You have a gift for making every moment feel special, Esme.",
+            "Esme, your kindness is a warm blanket for the soul.",
+            "Your playful energy is like a burst of fireworks, Esme.",
+            "Esme, your compassion is a melody that calms the heart.",
+            "You make every day feel like a new adventure, Esme.",
+            "Esme, your smile is a gift that keeps on giving.",
+            "Your courage is like a flame that never goes out, Esme.",
+            "Esme, your warmth is a hearth that draws everyone near.",
+            "You have a way of making the world feel more magical, Esme.",
+            "Esme, your creativity is a canvas of endless beauty.",
+            "Your kindness is like a river that nourishes everything it touches, Esme.",
+            "Esme, your presence is a light that never dims.",
+            "You make every moment feel like a warm hug, Esme.",
+            "Esme, your laughter is a spark that ignites happiness.",
+            "Your strength is like a mountain, steady and unyielding, Esme.",
+            "Esme, your playful spirit is a joy that never fades.",
+            "You have a heart that’s as big as the ocean, Esme.",
+            "Esme, your compassion is a bridge to everyone’s heart.",
+            "Your creativity is like a starburst of brilliant ideas, Esme.",
+            "Esme, your kindness is a gift that wraps the world in love.",
+            "You make every day feel like a soft, sunny morning, Esme.",
+            "Esme, your smile is a melody that everyone loves to hear.",
+            "Your adventurous heart is like a compass for joy, Esme.",
+            "Esme, your warmth is a glow that lights up every room.",
+            "You have a way of making everyone feel cherished, Esme.",
+            "Esme, your laughter is like a breeze that lifts every spirit.",
+            "Your creativity is a fountain of endless wonder, Esme.",
+            "Esme, your strength is a pillar that holds us all up.",
+            "You make the world a brighter place with every step, Esme.",
+            "Esme, your kindness is a song that soothes the soul.",
+            "Your playful charm is like a spark of magic, Esme.",
+            "Esme, your compassion is a warm light that guides us.",
+            "You have a heart that radiates joy in every moment, Esme.",
+            "Esme, your smile is like a sunrise that starts the day right.",
+            "Your creativity is a tapestry woven with beauty, Esme.",
+            "Esme, your kindness is a ripple that spreads far and wide.",
+            "You make every day feel like a cozy dream, Esme.",
+            "Esme, your laughter is a melody that dances in the air.",
+            "Your strength is like a tree that stands tall in any storm, Esme.",
+            "Esme, your playful spirit is a gift that keeps on giving.",
+            "You have a way of making everyone feel at ease, Esme.",
+            "Esme, your compassion is a blanket that warms every heart.",
+            "Your creativity is like a sky full of endless stars, Esme.",
+            "Esme, your kindness is a light that never goes out.",
+            "You make the world feel like a softer place, Esme.",
+            "Esme, your smile is a spark that lights up the room.",
+            "Your adventurous spirit is a flame that inspires us all, Esme.",
+            "Esme, your warmth is like a cozy nook on a rainy day.",
+            "You have a heart that’s as deep as the sea, Esme.",
+            "Esme, your laughter is like a bubble of pure joy.",
+            "Your creativity is a river that flows with new ideas, Esme.",
+            "Esme, your strength is a beacon that guides us forward.",
+            "You make every moment feel like a warm embrace, Esme.",
+            "Esme, your kindness is a melody that calms every heart.",
+            "Your playful energy is like a burst of sunshine, Esme.",
+            "Esme, your compassion is a gift that touches everyone.",
+            "You have a way of making the world feel more alive, Esme.",
+            "Esme, your smile is a light that brightens any day.",
+            "Your creativity is like a garden of blooming dreams, Esme.",
+            "Esme, your kindness is a star that shines for all to see.",
+            "You make every day feel like a gentle hug, Esme.",
+            "Esme, your laughter is a song that lifts every soul.",
+            "Your strength is like a rock that never wavers, Esme.",
+            "Esme, your playful spirit is a spark that ignites joy.",
+            "You have a heart that’s as warm as a summer day, Esme.",
+            "Esme, your compassion is a light that warms every heart.",
+            "Your creativity is a canvas painted with wonder, Esme.",
+            "Esme, your kindness is a gift that never stops giving.",
+            "You make the world a more beautiful place, Esme.",
+            "Esme, your smile is a melody that everyone loves.",
+            "Your adventurous heart is a spark that lights the way, Esme.",
+            "Esme, your warmth is a glow that comforts us all.",
+            "You have a way of making everyone feel special, Esme.",
+            "Esme, your laughter is like a ripple of happiness.",
+            "Your creativity is a fountain of endless beauty, Esme.",
+            "Esme, your strength is a pillar that inspires us all.",
+            "You make every moment feel like a gift, Esme.",
+            "Esme, your kindness is a light that shines forever.",
+            "Your playful charm is like a burst of magic, Esme.",
+            "Esme, your compassion is a melody that soothes us all.",
+            "You have a heart that radiates love and warmth, Esme.",
+            "Esme, your smile is a spark that brightens every day.",
+            "Your creativity is a tapestry of endless wonder, Esme.",
+            "Esme, your kindness is a ripple that touches every heart.",
+            "You make the world feel like a cozier place, Esme.",
+            "Esme, your laughter is a melody that dances in the air.",
+            "Your strength is like a mountain that stands tall, Esme.",
+            "Esme, your playful spirit is a joy that never fades.",
+            "You have a heart that’s as big as the sky, Esme.",
+            "Esme, your compassion is a bridge to every heart.",
+            "Your creativity is like a starburst of brilliant ideas, Esme.",
+            "Esme, your kindness is a gift that wraps the world in love.",
+            "You make every day feel like a soft, sunny morning, Esme.",
+            "Esme, your smile is a melody that everyone loves to hear.",
+            "Your adventurous spirit is like a compass for joy, Esme.",
+            "Esme, your warmth is a glow that lights up every room.",
+            "You have a way of making everyone feel cherished, Esme.",
+            "Esme, your laughter is like a breeze that lifts every spirit.",
+            "Your creativity is a fountain of endless wonder, Esme.",
+            "Esme, your strength is a pillar that holds us all up.",
+            "You make the world a brighter place with every step, Esme.",
+            "Esme, your kindness is a song that soothes the soul.",
+            "Your playful charm is like a spark of magic, Esme.",
+            "Esme, your compassion is a warm light that guides us.",
+            "You have a heart that radiates joy in every moment, Esme.",
+            "Esme, your smile is like a sunrise that starts the day right.",
+            "Your creativity is a tapestry woven with beauty, Esme.",
+            "Esme, your kindness is a ripple that spreads far and wide.",
+            "You make every day feel like a cozy dream, Esme.",
+            "Esme, your laughter is a melody that dances in the air.",
+            "Your strength is like a tree that stands tall in any storm, Esme.",
+            "Esme, your playful spirit is a gift that keeps on giving.",
+            "You have a way of making everyone feel at ease, Esme.",
+            "Esme, your compassion is a blanket that warms every heart.",
+            "Your creativity is like a sky full of endless stars, Esme.",
+            "Esme, your kindness is a light that never goes out.",
+            "You make the world feel like a softer place, Esme.",
+            "Esme, your smile is a spark that lights up the room.",
+            "Your adventurous spirit is a flame that inspires us all, Esme.",
+            "Esme, your warmth is like a cozy nook on a rainy day.",
+            "You have a heart that’s as deep as the sea, Esme.",
+            "Esme, your laughter is like a bubble of pure joy.",
+            "Your creativity is a river that flows with new ideas, Esme.",
+            "Esme, your strength is a beacon that guides us forward.",
+            "You make every moment feel like a warm embrace, Esme.",
+            "Esme, your kindness is a melody that calms every heart.",
+            "Your playful energy is like a burst of sunshine, Esme.",
+            "Esme, your compassion is a gift that touches everyone.",
+            "You have a way of making the world feel more alive, Esme.",
+            "Esme, your smile is a light that brightens any day.",
+            "Your creativity is like a garden of blooming dreams, Esme.",
+            "Esme, your kindness is a star that shines for all to see.",
+            "You make every day feel like a gentle hug, Esme.",
+            "Esme, your laughter is a song that lifts every soul.",
+            "Your strength is like a rock that never wavers, Esme.",
+            "Esme, your playful spirit is a spark that ignites joy.",
+            "You have a heart that’s as warm as a summer day, Esme.",
+            "Esme, your compassion is a light that warms every heart.",
+            "Your creativity is a canvas painted with wonder, Esme.",
+            "Esme, your kindness is a gift that never stops giving.",
+            "You make the world a more beautiful place, Esme.",
+            "Esme, your smile is a melody that everyone loves.",
+            "Your adventurous heart is a spark that lights the way, Esme.",
+            "Esme, your warmth is a glow that comforts us all.",
+            "You have a way of making everyone feel special, Esme.",
+            "Esme, your laughter is like a ripple of happiness.",
+            "Your creativity is a fountain of endless beauty, Esme.",
+            "Esme, your strength is a pillar that inspires us all.",
+            "You make every moment feel like a gift, Esme.",
+            "Esme, your kindness is a light that shines forever.",
+            "Your playful charm is like a burst of magic, Esme.",
+            "Esme, your compassion is a melody that soothes us all.",
+            "You have a heart that radiates love and warmth, Esme.",
+            "Esme, your smile is a spark that brightens every day.",
+            "Your creativity is a tapestry of endless wonder, Esme.",
+            "Esme, your kindness is a ripple that touches every heart.",
+            "You make the world feel like a cozier place, Esme.",
+            "Esme, your laughter is a melody that dances in the air.",
+            "Your strength is like a mountain that stands tall, Esme.",
+            "Esme, your playful spirit is a joy that never fades."
+        ];
+
+        function generateCompliment() {
+            const compliment = compliments[Math.floor(Math.random() * compliments.length)];
+            document.getElementById('compliment').textContent = compliment;
+        }
+
+        // Zen spa-like background animation with circles and hearts
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 50;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.isHeart = Math.random() < 0.3; // 30% chance to be a heart
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                if (this.isHeart) {
+                    // Draw a heart shape
+                    const s = this.size * 0.3;
+                    ctx.moveTo(this.x, this.y - s);
+                    ctx.bezierCurveTo(this.x - s, this.y - s * 2, this.x - s * 2, this.y, this.x, this.y + s * 2);
+                    ctx.bezierCurveTo(this.x + s * 2, this.y, this.x + s, this.y - s * 2, this.x, this.y - s);
+                    ctx.closePath();
+                } else {
+                    // Draw a circle
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                }
+                ctx.fillStyle = `rgba(244, 114, 182, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
