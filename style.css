@@ -1,0 +1,335 @@
+/* style.css */
+
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #ee9ca7; /* Playful pink from provided animation */
+    color: #8b6a60;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.section {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    padding: 20px;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Confetti Background */
+.confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.confetti::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ffdfba;
+    animation: confetti-fall 5s linear infinite;
+}
+
+.confetti::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ffafcc;
+    animation: confetti-fall 4s linear infinite 1s;
+}
+
+/* More confetti pieces */
+.confetti {
+    --confetti-count: 50;
+}
+
+.confetti > div {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: confetti-fall 5s linear infinite;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-100%) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Cake Animation Styles from provided code */
+.cake-container {
+    position: relative;
+    margin: 20px auto;
+}
+
+#cake {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+}
+
+.cake {
+    background: #ffffff;
+    border-radius: 10px;
+    position: absolute;
+    top: 228px;
+    left: 50%;
+    margin-left: -2.4px;
+    margin-top: -8.33333333px;
+    width: 5px;
+    height: 35px;
+    transform: translateY(-300px);
+    backface-visibility: hidden;
+    animation: in 500ms 6s ease-out forwards;
+}
+
+.cake:after,
+.cake:before {
+    background: rgba(255, 0, 0, 0.4);
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2.22222222px;
+}
+
+.cake:after {
+    top: 25%;
+    left: 0;
+}
+
+.cake:before {
+    top: 45%;
+    left: 0;
+}
+
+.fuego {
+    border-radius: 100%;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    margin-left: -2.6px;
+    width: 6.66666667px;
+    height: 18px;
+}
+
+.fuego:nth-child(1) {
+    animation: fuego 2s 6.5s infinite;
+}
+
+.fuego:nth-child(2) {
+    animation: fuego 1.5s 6.5s infinite;
+}
+
+.fuego:nth-child(3) {
+    animation: fuego 1s 6.5s infinite;
+}
+
+.fuego:nth-child(4) {
+    animation: fuego 0.5s 6.5s infinite;
+}
+
+.fuego:nth-child(5) {
+    animation: fuego 0.2s 6.5s infinite;
+}
+
+@keyframes fuego {
+    0%, 100% {
+        background: rgba(254, 248, 97, 0.5);
+        box-shadow: 0 0 40px 10px rgba(248, 233, 209, 0.2);
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        background: rgba(255, 50, 0, 0.1);
+        box-shadow: 0 0 40px 20px rgba(248, 233, 209, 0.2);
+        transform: translateY(-20px) scale(0);
+    }
+}
+
+@keyframes in {
+    to {
+        transform: translateY(0);
+    }
+}
+
+.text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    text-align: center;
+}
+
+.text h1 {
+    font-size: 2.5em;
+    animation: text-bounce 1s ease-in-out infinite alternate;
+}
+
+@keyframes text-bounce {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+.name {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Button Styles */
+.btn {
+    background: #ffafcc;
+    border: none;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    background: #ff85a1;
+}
+
+/* Game Styles */
+#game h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: transform 0.6s;
+}
+
+.front {
+    background: #ffdfba;
+    transform: rotateY(180deg);
+}
+
+.back {
+    background: #a88679;
+    font-size: 2em;
+}
+
+.card.flipped .front {
+    transform: rotateY(0deg);
+}
+
+.card.flipped .back {
+    transform: rotateY(-180deg);
+}
+
+.card.matched .front,
+.card.matched .back {
+    opacity: 0.5;
+}
+
+/* Modal for Surprise */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    animation: modal-pop 0.5s ease-out;
+}
+
+@keyframes modal-pop {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .game-board {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 300px;
+    }
+
+    .card {
+        height: 80px;
+    }
+
+    .text h1 {
+        font-size: 2em;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
