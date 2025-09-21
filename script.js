@@ -1,6 +1,4 @@
-// script.js
-
-// Function to create confetti elements
+// Create confetti elements for background
 function createConfetti(container, count = 50) {
     for (let i = 0; i < count; i++) {
         const piece = document.createElement('div');
@@ -20,14 +18,14 @@ function createConfetti(container, count = 50) {
 const confettiContainer = document.querySelector('.confetti');
 createConfetti(confettiContainer);
 
-// Game logic
+// Memory game logic
 const gameBoard = document.getElementById('game-board');
 const emojis = ['🎂', '🎉', '🎈', '🥳', '🎁', '🍰', '🎂', '🎉', '🎈', '🥳', '🎁', '🍰']; // 6 pairs
 let shuffled = emojis.sort(() => 0.5 - Math.random());
 let selected = [];
 let matched = 0;
 
-// Create cards
+// Create game cards
 shuffled.forEach(emoji => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -52,7 +50,7 @@ function handleCardClick(e) {
     }
 }
 
-// Check for match
+// Check for card match
 function checkMatch() {
     const [card1, card2] = selected;
     const emoji1 = card1.querySelector('.front').textContent;
@@ -74,12 +72,12 @@ function checkMatch() {
     selected = [];
 }
 
-// Celebrate on win
+// Celebrate on game completion
 function celebrate() {
     const surprise = document.getElementById('surprise');
     surprise.style.display = 'flex';
 
-    // Animate with GSAP
+    // Animate modal with GSAP
     gsap.from('.modal-content', { scale: 0, rotation: 360, duration: 1, ease: 'bounce.out' });
 
     // Additional confetti for celebration
@@ -88,7 +86,7 @@ function celebrate() {
     setTimeout(() => celebConfetti.innerHTML = '', 5000); // Clean up after 5s
 }
 
-// Section toggling
+// Toggle sections
 document.getElementById('start-game').addEventListener('click', () => {
     document.getElementById('homepage').classList.remove('active');
     document.getElementById('game').classList.add('active');
