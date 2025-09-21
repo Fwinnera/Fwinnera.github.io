@@ -1,5 +1,3 @@
-/* style.css */
-
 /* General Styles */
 * {
     margin: 0;
@@ -9,7 +7,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #ee9ca7; /* Playful pink from provided animation */
+    background: #ee9ca7; /* Playful pink background */
     color: #8b6a60;
     overflow-x: hidden;
     position: relative;
@@ -62,11 +60,6 @@ body {
     animation: confetti-fall 4s linear infinite 1s;
 }
 
-/* More confetti pieces */
-.confetti {
-    --confetti-count: 50;
-}
-
 .confetti > div {
     position: absolute;
     width: 10px;
@@ -86,10 +79,12 @@ body {
     }
 }
 
-/* Cake Animation Styles from provided code */
+/* Cake Animation Styles */
 .cake-container {
     position: relative;
     margin: 20px auto;
+    width: 200px;
+    height: 200px;
 }
 
 #cake {
@@ -102,15 +97,13 @@ body {
     background: #ffffff;
     border-radius: 10px;
     position: absolute;
-    top: 228px;
+    top: 80px; /* Adjusted to rest on top cake layer */
     left: 50%;
-    margin-left: -2.4px;
-    margin-top: -8.33333333px;
+    margin-left: -2.5px;
     width: 5px;
-    height: 35px;
-    transform: translateY(-300px);
-    backface-visibility: hidden;
-    animation: in 500ms 6s ease-out forwards;
+    height: 20px; /* Shortened for better proportion */
+    transform: translateY(-100px);
+    animation: in 500ms 2s ease-out forwards;
 }
 
 .cake:after,
@@ -119,7 +112,7 @@ body {
     content: "";
     position: absolute;
     width: 100%;
-    height: 2.22222222px;
+    height: 2px;
 }
 
 .cake:after {
@@ -135,43 +128,43 @@ body {
 .fuego {
     border-radius: 100%;
     position: absolute;
-    top: -20px;
+    top: -15px; /* Adjusted to align with candle */
     left: 50%;
-    margin-left: -2.6px;
-    width: 6.66666667px;
-    height: 18px;
+    margin-left: -3px;
+    width: 6px;
+    height: 15px;
 }
 
 .fuego:nth-child(1) {
-    animation: fuego 2s 6.5s infinite;
+    animation: fuego 2s 2.5s infinite;
 }
 
 .fuego:nth-child(2) {
-    animation: fuego 1.5s 6.5s infinite;
+    animation: fuego 1.5s 2.5s infinite;
 }
 
 .fuego:nth-child(3) {
-    animation: fuego 1s 6.5s infinite;
+    animation: fuego 1s 2.5s infinite;
 }
 
 .fuego:nth-child(4) {
-    animation: fuego 0.5s 6.5s infinite;
+    animation: fuego 0.5s 2.5s infinite;
 }
 
 .fuego:nth-child(5) {
-    animation: fuego 0.2s 6.5s infinite;
+    animation: fuego 0.2s 2.5s infinite;
 }
 
 @keyframes fuego {
     0%, 100% {
         background: rgba(254, 248, 97, 0.5);
-        box-shadow: 0 0 40px 10px rgba(248, 233, 209, 0.2);
+        box-shadow: 0 0 20px 5px rgba(248, 233, 209, 0.2);
         transform: translateY(0) scale(1);
     }
     50% {
         background: rgba(255, 50, 0, 0.1);
-        box-shadow: 0 0 40px 20px rgba(248, 233, 209, 0.2);
-        transform: translateY(-20px) scale(0);
+        box-shadow: 0 0 20px 10px rgba(248, 233, 209, 0.2);
+        transform: translateY(-10px) scale(0.8);
     }
 }
 
@@ -315,6 +308,16 @@ body {
 
 /* Responsive Design */
 @media (max-width: 600px) {
+    .cake-container {
+        width: 150px;
+        height: 150px;
+    }
+
+    #cake {
+        width: 150px;
+        height: 150px;
+    }
+
     .game-board {
         grid-template-columns: repeat(2, 1fr);
         max-width: 300px;
